@@ -1,14 +1,12 @@
-# Stage 1: Build Angular app
-FROM node:18 AS build
-WORKDIR /app
+FROM openjdk:17
 
-COPY package*.json ./
-RUN npm install
+MAINTAINER <Ashok Bollepalli>
 
-COPY . .
-RUN npm run build --prod
+COPY target/products_api.jar  /usr/app/
 
-# Stage 2: Serve using NGINX
-FROM nginx:alpine
-COPY --from=build /app/dist/ashokit_ecomm_store /usr/share/nginx/html
-EXPOSE 80
+WORKDIR /usr/app/
+
+ENTRYPOINT ["java", "-jar", "products_api.jar"]
+
+EXPOSE 8080
+
