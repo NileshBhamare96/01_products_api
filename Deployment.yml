@@ -16,7 +16,8 @@ spec:
   spec:
     containers:
     - name: productscontainer
-      image: ashokit/products
+      image: nileshbhamare96/backend:latest
+      imagePullPolicy: Always   # <-- ensures latest image is pulled
       ports:
       - containerPort: 8080
 ---
