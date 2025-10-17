@@ -1,54 +1,75 @@
-package in.ashokit.ecomm.config;
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>in.ashokit.ecomm</groupId>
+	<artifactId>01_Products_API</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ecommerce_backend</name>
+	<description>Demo project for Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>		
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.metamodel.EntityType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+	<build>
+		<finalName>products_api</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+			      <groupId>org.sonarsource.scanner.maven</groupId>
+			      <artifactId>sonar-maven-plugin</artifactId>
+			      <version>3.9.1.2184</version>
+    			</plugin>
+		</plugins>
+	</build>
 
-@Configuration
-public class MyDataRestConfig implements RepositoryRestConfigurer {
-
-    @Autowired
-    private EntityManager entityManager;
-
-    // ✅ Correct override method (Spring Boot 3.3.x)
-    @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        exposeIds(config);
-    }
-
-    // ✅ Global CORS filter (EKS + React frontend compatible)
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-
-    private void exposeIds(RepositoryRestConfiguration config) {
-        Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
-        List<Class<?>> entityClasses = new ArrayList<>();
-
-        for (EntityType<?> tempEntityType : entities) {
-            entityClasses.add(tempEntityType.getJavaType());
-        }
-
-        config.exposeIdsFor(entityClasses.toArray(new Class[0]));
-    }
-}
+</project>
