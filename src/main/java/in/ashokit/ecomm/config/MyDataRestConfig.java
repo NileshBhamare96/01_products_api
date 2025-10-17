@@ -21,17 +21,18 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     @Autowired
     private EntityManager entityManager;
 
+    // ✅ Correct override method (Spring Boot 3.3.x)
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         exposeIds(config);
     }
 
-    // ✅ Global CORS filter (works perfectly on EKS)
+    // ✅ Global CORS filter (EKS + React frontend compatible)
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");  // Allow all origins
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
@@ -48,7 +49,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
             entityClasses.add(tempEntityType.getJavaType());
         }
 
-        Class<?>[] domainTypes = entityClasses.toArray(new Class[0]);
-        config.exposeIdsFor(domainTypes);
+        config.exposeIdsFor(entityClasses.toArray(new Class[0]));
     }
 }
