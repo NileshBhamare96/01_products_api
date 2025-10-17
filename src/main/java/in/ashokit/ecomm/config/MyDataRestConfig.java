@@ -20,9 +20,11 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     @Autowired
     private EntityManager entityManager;
 
+    // Must match the interface exactly
     @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, org.springframework.web.servlet.config.annotation.CorsRegistry cors) {
         exposeIds(config);
+        // No need to configure CORS here if using global CorsFilter
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {
